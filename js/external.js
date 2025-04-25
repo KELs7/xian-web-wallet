@@ -5,7 +5,7 @@ window.addEventListener("message", (event) => {
       insertHTMLAndExecuteScripts(document.getElementById("app-box"), event.data.html);
     }
     if (event.data.type === "INITIAL_STATE") {
-      publicKey = event.data.state.publicKey;
+      selectedAccountVk = event.data.state.selectedVk;
       unencryptedPrivateKey = event.data.state.unencryptedPrivateKey;
       locked = event.data.state.locked;
       tx_history = event.data.state.tx_history;
