@@ -5,7 +5,7 @@ async function acceptRequest() {
     let kwargs = JSON.parse(document.getElementById('requestTransactionParams').innerHTML);
     let stampLimit = parseInt(document.getElementById('requestTransactionStampLimit').innerHTML);
 
-    let payload = {
+    let transaction = {
         payload: {
             chain_id: CHAIN_ID,
             contract: contract,
@@ -17,8 +17,8 @@ async function acceptRequest() {
             signature: "",
         }
     };
-    console.log(payload);
-    const signed_tx = await signTransaction(payload, unencryptedMnemonic, selectedAccount.vk);
+    console.log(transaction);
+    const signed_tx = await signTransaction(transaction, unencryptedMnemonic, selectedAccount.vk);
     const response = await broadcastTransaction(signed_tx);
 
     try {
@@ -83,7 +83,7 @@ async function estimateRequestStamps(){
     };
 
     try {
-        let signed_tx = await signTransaction(payload, unencryptedMnemonic, selectedAccount.vk);
+        let signed_tx = await signTransaction(transaction, unencryptedMnemonic, selectedAccount.vk);
         let stamps = await estimateStamps(signed_tx);
         let success = stamps["success"];
         let result = stamps["tx_result"];
