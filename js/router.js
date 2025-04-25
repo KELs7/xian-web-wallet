@@ -50,10 +50,16 @@ function createExternalWindow(page, some_data = null, send_response = null) {
       });
   };
 
-  const sendInitialState = () => {
+  const sendInitialState = async() => {
+    const currentSelectedVk = await getSelectedVK();
     externalWindow.postMessage({
       type: "INITIAL_STATE",
-      state: { publicKey, unencryptedPrivateKey, locked, tx_history }
+      state: {
+        selectedVk: currentSelectedVk, // Send the currently selected VK
+        locked: locked,
+        CHAIN_ID: CHAIN_ID,
+        tx_history
+      }
     }, "*");
   };
 
@@ -95,7 +101,9 @@ window.addEventListener("message", (event) => {
   if (event.data.type === "REQUEST_TRANSACTION") {
     const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
-    callbacks[callbackKey](event.data.data);
+    if (typeof callbacks[callbackKey] === 'function') {
+      callbacks[callbackKey](event.data.data);
+    }
     tx_history = JSON.parse(localStorage.getItem("tx_history")) || [];
     if (app_page == "wallet"){
       changePage("wallet");
@@ -104,13 +112,17 @@ window.addEventListener("message", (event) => {
   if (event.data.type === "REQUEST_SIGNATURE") {
     const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
-    callbacks[callbackKey](event.data.data);
+    if (typeof callbacks[callbackKey] === 'function') {
+      callbacks[callbackKey](event.data.data);
+    }
     toast('success', 'Successfully signed message');
   }
   if (event.data.type === "REQUEST_TOKEN") {
     const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
-    callbacks[callbackKey](event.data.data);
+    if (typeof callbacks[callbackKey] === 'function') {
+      callbacks[callbackKey](event.data.data);
+    }
     token_list = JSON.parse(localStorage.getItem("token_list")) || ["currency"];
     if (app_page == "wallet"){
       changePage("settings");
@@ -346,6 +358,12 @@ async function getSelectedAccount() {
   return account || null; // Return null if no accounts exist at all
 }
 
+async function getSelectedVK() {
+  // Directly return the global variable
+  const account = await getSelectedAccount(); // Ensure the VK is valid and potentially defaulted
+  return account ? account.vk : null;
+}
+
 
 document.addEventListener("DOMContentLoaded", async(event) => {
   if (document.getElementById("onlineStatus") == null) {
@@ -375,16 +393,16 @@ document.addEventListener("DOMContentLoaded", async(event) => {
 
     // Determine initial page
     if (encryptedSeed || accounts.some(a => a.type === 'imported')) { // Check if any wallet data exists
-        locked = true;
-        selectedAccountVk = storedVk; // Initialize with stored VK (might be null)
-        // getSelectedAccount() will handle defaulting if storedVk is invalid/null later
-        unencryptedMnemonic = null; // Ensure mnemonic is null initially
-        unencryptedImportedSks = {}; // Ensure imported SKs are empty initially
-    changePage("password-input");
-  } else {
-        locked = true;
-        encryptedSeed = null; accounts = []; selectedAccountVk = null; // Ensure clean state
-        unencryptedMnemonic = null; unencryptedImportedSks = {};
-    changePage("get-started");
-  }
+      locked = true;
+      selectedAccountVk = storedVk; // Initialize with stored VK (might be null)
+      // getSelectedAccount() will handle defaulting if storedVk is invalid/null later
+      unencryptedMnemonic = null; // Ensure mnemonic is null initially
+      unencryptedImportedSks = {}; // Ensure imported SKs are empty initially
+      changePage("password-input");
+    } else {
+      locked = true;
+      encryptedSeed = null; accounts = []; selectedAccountVk = null; // Ensure clean state
+      unencryptedMnemonic = null; unencryptedImportedSks = {};
+      changePage("get-started");
+    }
 });
