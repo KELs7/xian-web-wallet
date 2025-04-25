@@ -64,9 +64,11 @@ function lockWallet() {
         return;
     }
     // Locks the wallet
-    unencryptedPrivateKey = null;
     locked = true;
-    changePage('password-input');
+    selectedAccountVk = storedVk;
+    unencryptedMnemonic = null; 
+    unencryptedImportedSks = {}; 
+    changePage("password-input");
 }
 
 const SESSION_EXPIRATION_IN_MIN = 30;
