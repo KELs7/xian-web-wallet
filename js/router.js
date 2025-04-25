@@ -489,7 +489,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     await getChainID();
 
     // Read HD Wallet related data
-    const encryptedSeed = await readEncryptedSeed();
+    let encryptedSeed = await readEncryptedSeed();
     accounts = await readAccounts();
     // Read the stored VK instead of index
     const storedVk = await readSelectedAccountVk();
