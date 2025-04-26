@@ -392,7 +392,7 @@ document.addEventListener("DOMContentLoaded", async(event) => {
     const storedVk = await readSelectedAccountVk();
 
     // Determine initial page
-    if (encryptedSeed || accounts.some(a => a.type === 'imported')) { // Check if any wallet data exists
+    if (encryptedSeed || accounts.some(a => a.type === 'derived')) { // Check if any wallet data exists
       locked = true;
       selectedAccountVk = storedVk; // Initialize with stored VK (might be null)
       // getSelectedAccount() will handle defaulting if storedVk is invalid/null later
