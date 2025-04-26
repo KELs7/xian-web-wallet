@@ -35,8 +35,8 @@ document.getElementById('side-change-page-wallet').addEventListener('click', fun
 }
 
 if(document.getElementById('side-lock-wallet')) {
-document.getElementById('side-lock-wallet').addEventListener('click', function() {
-    lockWallet();
+document.getElementById('side-lock-wallet').addEventListener('click', async function() {
+    await lockWallet();
 });
 }
 
@@ -57,12 +57,12 @@ if(document.getElementById('side-change-page-messenger')) {
     });
     }
     
-
-function lockWallet() {
+async function lockWallet() {
     let confirm_lock = confirm("Are you sure you want to lock the wallet?");
     if (!confirm_lock) {
         return;
     }
+    const storedVk = await readSelectedAccountVk();
     // Locks the wallet
     locked = true;
     selectedAccountVk = storedVk;
@@ -132,10 +132,12 @@ async function sendEventGA(name, params = {}) {
     });
 }
 
-(async () => {
+async function makeSodiumReady(){
     // Wait for sodium to initialize
     await sodium.ready;
 
     // Now you can safely use sodium functions
     console.log("Sodium is ready!");
-})();
+};
+
+makeSodiumReady();
