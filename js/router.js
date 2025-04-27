@@ -2,7 +2,6 @@ var app_page = "get-started";
 var app_box = document.getElementById("app-box");
 var unencryptedMnemonic = null;
 var accounts = [];
-// var selectedAccountIndex = 0; // REMOVE THIS
 var selectedAccountVk = null;  // ADD THIS
 var unencryptedImportedSks = {}; // Keep this for imported keys
 var locked = true;
@@ -99,7 +98,6 @@ function createExternalWindow(page, some_data = null, send_response = null) {
 
 window.addEventListener("message", (event) => {
   if (event.data.type === "REQUEST_TRANSACTION") {
-    const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
     if (typeof callbacks[callbackKey] === 'function') {
       callbacks[callbackKey](event.data.data);
@@ -110,7 +108,6 @@ window.addEventListener("message", (event) => {
   }
   }
   if (event.data.type === "REQUEST_SIGNATURE") {
-    const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
     if (typeof callbacks[callbackKey] === 'function') {
       callbacks[callbackKey](event.data.data);
@@ -118,7 +115,6 @@ window.addEventListener("message", (event) => {
     toast('success', 'Successfully signed message');
   }
   if (event.data.type === "REQUEST_TOKEN") {
-    const some_data = event.data.data;
     const callbackKey = event.data.callbackKey;
     if (typeof callbacks[callbackKey] === 'function') {
       callbacks[callbackKey](event.data.data);
