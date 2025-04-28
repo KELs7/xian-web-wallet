@@ -29,8 +29,8 @@ function copyTextToClipboard(text) {
 
 function goToWallet() {
     Promise.all([
-        readSecureCookie('publicKey'),
-        readSecureCookie('encryptedPrivateKey')
+        readEncryptedSeed(),
+        readSelectedAccountVk()
     ]).then((values) => {
         if( values[0] === null || values[1] === null) {
             changePage('get-started');
