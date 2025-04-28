@@ -6,9 +6,11 @@ window.addEventListener("message", (event) => {
     }
     if (event.data.type === "INITIAL_STATE") {
       selectedAccountVk = event.data.state.selectedVk;
-      unencryptedPrivateKey = event.data.state.unencryptedPrivateKey;
+      unencryptedMnemonic = event.data.state.unencryptedMnemonic;
       locked = event.data.state.locked;
-      tx_history = event.data.state.tx_history;
+      // tx_history = event.data.state.tx_history;
+      accounts = event.data.state.accounts;
+      unencryptedImportedSks =  event.data.state.unencryptedImportedSks;
     }
     if (event.data.type === "REQUEST_TRANSACTION") {
       const some_data = event.data.data;

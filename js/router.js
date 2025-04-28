@@ -55,9 +55,12 @@ function createExternalWindow(page, some_data = null, send_response = null) {
       type: "INITIAL_STATE",
       state: {
         selectedVk: currentSelectedVk, // Send the currently selected VK
-        locked: locked,
-        CHAIN_ID: CHAIN_ID,
-        tx_history
+        accounts,
+        locked,
+        CHAIN_ID,
+        tx_history,
+        unencryptedMnemonic,
+        unencryptedImportedSks
       }
     }, "*");
   };
