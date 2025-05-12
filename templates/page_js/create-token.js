@@ -7,18 +7,13 @@ ApproveEvent = LogEvent(event="Approve", params={"from":{'type':str, 'idx':True}
 
 @construct
 def seed():
-    # Supply is dynamically set below
-    balances[ctx.caller] = 0 # Start with 0, supply added below
-    metadata['token_name'] = "TOKEN_NAME"       # Replaced by input
-    metadata['token_symbol'] = "TOKEN_SYMBOL"   # Replaced by input
-    metadata['token_logo_url'] = 'TOKEN_LOGO_URL' # Replaced by input
-    metadata['token_website'] = 'TOKEN_WEBSITE'   # Replaced by input
-    metadata['total_supply'] = 0               # Replaced by input
+    balances[ctx.caller] = 12345321
+    metadata['token_name'] = "TOKEN_NAME"
+    metadata['token_symbol'] = "TOKEN_SYMBOL"
+    metadata['token_logo_url'] = 'TOKEN_LOGO_URL'
+    metadata['token_website'] = 'TOKEN_WEBSITE'
+    metadata['total_supply'] = 12345321
     metadata['operator'] = ctx.caller
-
-    # Assign total supply to the creator
-    balances[ctx.caller] = metadata['total_supply']
-
 
 @export
 def change_metadata(key: str, value: Any):
@@ -36,35 +31,29 @@ def balance_of(address: str):
 @export
 def transfer(amount: float, to: str):
     assert amount > 0, 'Cannot send negative balances!'
-    sender = ctx.caller
-    assert balances[sender] >= amount, 'Not enough coins to send!'
-
-    balances[sender] -= amount
-    # Ensure recipient balance exists before adding
-    balances[to] = balances[to] + amount if balances[to] is not None else amount
-    TransferEvent({"from": sender, "to": to, "amount": amount})
+    assert balances[ctx.caller] >= amount, 'Not enough coins to send!'
+    balances[ctx.caller] -= amount
+    balances[to] += amount
+    TransferEvent({"from": ctx.caller, "to": to, "amount": amount})
 
 
 @export
 def approve(amount: float, to: str):
-    assert amount > 0, 'Cannot approve negative balances!'
-    sender = ctx.caller
-    balances[sender, to] = amount
-    ApproveEvent({"from": sender, "to": to, "amount": amount})
+    assert amount > 0, 'Cannot send negative balances!'
+
+    balances[ctx.caller, to] = amount
+    ApproveEvent({"from": ctx.caller, "to": to, "amount": amount})
 
 
 @export
 def transfer_from(amount: float, to: str, main_account: str):
     assert amount > 0, 'Cannot send negative balances!'
-    sender = ctx.caller # The one calling this function (spender)
-    approved_amount = balances[main_account, sender]
+    assert balances[main_account, ctx.caller] >= amount, f'Not enough coins approved to send! You have {balances[main_account, ctx.caller]} and are trying to spend {amount}'
+    assert balances[main_account] >= amount, 'Not enough coins to send!'
 
-    assert approved_amount >= amount, f'Not enough coins approved to send! You have {approved_amount} and are trying to spend {amount}'
-    assert balances[main_account] >= amount, 'Not enough coins in main account to send!'
-
-    balances[main_account, sender] -= amount
+    balances[main_account, ctx.caller] -= amount
     balances[main_account] -= amount
-    balances[to] = balances[to] + amount if balances[to] is not None else amount
+    balances[to] += amount
     TransferEvent({"from": main_account, "to": to, "amount": amount})
 `;
 
