@@ -72,7 +72,7 @@ async function createHdWallet() { // Renamed function and made async
         const newWalletData = createMasterSeed(password); // From xian.js
 
         // 2. Prepare initial account data
-        const initialAccount = {
+        const initialDerivedAccount = {
             index: 0,
             vk: newWalletData.publicKey, // VK of the first account (index 0)
             name: "Account 1", // Default name for the first account
@@ -82,14 +82,16 @@ async function createHdWallet() { // Renamed function and made async
         // 3. Update Global State (in router.js scope)
         // Note: Direct modification of globals isn't ideal, but follows existing pattern.
         // Consider passing these back or using a state management approach later.
+        const storedAccounts = await readAccounts();
         unencryptedMnemonic = newWalletData.unencryptedMnemonic; // Store temporarily for immediate use
-        accounts = [initialAccount];
-        selectedAccountVk = initialAccount.vk;
+        storedAccounts.push(initialDerivedAccount)
+        accounts = storedAccounts;
+        selectedAccountVk = newWalletData.publicKey;
         locked = false; // Wallet is created and immediately unlocked
 
         // 4. Save State to Storage (using async functions from cookietoolz.js)
         saveEncryptedSeed(newWalletData.encryptedSeed);
-        saveAccounts(accounts);
+        saveAccounts(storedAccounts);
         await saveSelectedAccountVk(selectedAccountVk);
 
         // Clear password fields after successful creation for security

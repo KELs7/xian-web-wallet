@@ -387,6 +387,24 @@ document.addEventListener("DOMContentLoaded", async(event) => {
     // Read HD Wallet related data
     let encryptedSeed = await readEncryptedSeed();
     accounts = await readAccounts();
+    //make compatible with old version of wallet
+    const pubKey = await readSecureCookie('publicKey'); 
+    const encryptedPrivateKey = await readSecureCookie('encryptedPrivateKey');
+
+    if (pubKey){
+        const newAccount = {
+            vk: pubKey,
+            name: 'old-account',
+            encryptedSk: encryptedPrivateKey,
+            type: 'imported'
+        }
+
+        accounts.push(newAccount);
+        saveAccounts(accounts);
+
+        eraseSecureCookie('publicKey');
+        eraseSecureCookie('encryptedPrivateKey');
+    }
     // Read the stored VK instead of index
     const storedVk = await readSelectedAccountVk();
 
