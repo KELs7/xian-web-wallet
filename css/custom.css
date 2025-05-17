@@ -54,29 +54,6 @@ a{
     box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
 }
 
-
-
-.governance-section {
-    display: flex;
-    flex-direction: column;
-}
-
-.governance-section p {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-.governance-section-buttons button {
-    background-color: #ffffff;
-}
-
-.governance-section-flex{
-    display: flex;
-    flex-direction: column;
-}
-.title-container-governance{
-    margin-top:1rem;
-}
 .form-group label {
     display: block;
     font-weight: 600;
@@ -103,20 +80,11 @@ a{
     margin-right: 10px; /* Space between the label and the value */
 }
 
-.value-gov {
-    
-}
-
 a:hover{
     color: #06e6cb;
     text-decoration: underline;
 }
-.governance-sub-title{
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-    text-decoration: underline;
-}
+
 .ide-icon{
     position: absolute;
     left: 0;
@@ -125,6 +93,7 @@ a:hover{
     color:#06e6cb;
     cursor: pointer;
 }
+
 .explorer-url{
     text-overflow: ellipsis;
     overflow: hidden;
@@ -236,28 +205,10 @@ a:hover{
     #local-activity{
         height: 1px;
     }
-    .governance-section-wrapper{
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .governance-section-buttons button {
-        width: 16rem!important;
-        max-width: 100%;
-    }
-    .governance-section-buttons-colored button {
-        width: 8rem!important;
-        max-width: 100%;
-    }
 }
 .app-logo {
     width: 32px; /* Adjust based on your logo's size */
     height: auto;
-}
-.governance-section-buttons-colored {
-    display: flex;
-    gap: 10px;
 }
 
 .side-nav {
@@ -445,8 +396,6 @@ a:hover{
     border-bottom: 1px solid #8a8b8e;
 }
 
-.dark-mode .token-list {
-}
 .dark-mode .token-item {
     border: 1px solid #8a8b8e;
 }
@@ -548,10 +497,6 @@ a:hover{
     border: 1px solid transparent; /* Ensures the layout doesn't shift when border is added on hover or focus */
     border-radius: 5px 5px 0 0; /* Rounded corners at the top */
     transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-.wallet-tabs a:hover, .wallet-tabs a:focus {
-
 }
 
 /* Active tab style */
@@ -713,10 +658,7 @@ a:hover{
     background-color: #202020;
     border: 1px solid #8a8b8e;
 }
-.governance-section-buttons{
-    display: flex;
-    justify-content: flex-end;
-}
+
 .token-name{overflow: hidden;
     text-overflow: ellipsis;}
 @media screen and (max-width: 450px) {

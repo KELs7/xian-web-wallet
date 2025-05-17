@@ -40,12 +40,6 @@ document.getElementById('side-lock-wallet').addEventListener('click', async func
 });
 }
 
-if(document.getElementById('side-change-page-insights')) {
-document.getElementById('side-change-page-insights').addEventListener('click', function() {
-    changePage('insights');
-});
-
-}
 if(document.getElementById('side-change-page-ecosystem-news')) {
 document.getElementById('side-change-page-ecosystem-news').addEventListener('click', function() {
     changePage('ecosystem-news');
