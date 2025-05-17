@@ -304,16 +304,17 @@ async function signMessage(message, decryptedMnemonic, senderVk) {
          if (!selectedAccount) throw new Error(`Account not found for vk: ${senderVk}`);
 
          if (selectedAccount.type === 'derived') {
-             if (!decryptedMnemonic) throw new Error("Mnemonic required for derived account signing.");
-             keyPair = deriveKeyPairFromMnemonic(decryptedMnemonic, selectedAccount.index);
-              if (toHexString(keyPair.vk) !== senderVk) throw new Error("Public key mismatch during derivation.");
-             derivedSkBytes = keyPair.sk;
+            if (!decryptedMnemonic) throw new Error("Mnemonic required for derived account signing.");
+            keyPair = deriveKeyPairFromMnemonic(decryptedMnemonic, selectedAccount.index);
+            if (toHexString(keyPair.vk) !== senderVk) throw new Error("Public key mismatch during derivation.");
+            derivedSkBytes = keyPair.sk;
          } else if (selectedAccount.type === 'imported') {
-             const decryptedSkHex = unencryptedImportedSks[senderVk];
-             if (!decryptedSkHex) throw new Error(`Decrypted private key not available for imported account ${senderVk}.`);
-             derivedSkBytes = fromHexString(decryptedSkHex);
-             keyPair = nacl.sign.keyPair.fromSeed(derivedSkBytes);
-             if (toHexString(keyPair.publicKey) !== senderVk) throw new Error(`Public key mismatch for imported account ${senderVk}.`);
+            const decryptedSkHex = unencryptedImportedSks[senderVk];
+            if (!decryptedSkHex) throw new Error(`Decrypted private key not available for imported account ${senderVk}.`);
+            derivedSkBytes = fromHexString(decryptedSkHex);
+            keyPair = nacl.sign.keyPair.fromSeed(derivedSkBytes);
+            keyPair.vk = keyPair.publicKey
+             if (toHexString(keyPair.vk) !== senderVk) throw new Error(`Public key mismatch for imported account ${senderVk}.`);
          } else {
              throw new Error(`Unknown account type '${selectedAccount.type}' for account ${senderVk}`);
          }
