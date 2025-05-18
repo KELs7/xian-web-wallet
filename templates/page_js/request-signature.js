@@ -3,7 +3,6 @@ async function acceptRequest() {
     
     try {
         // Check if the wallet is locked, assuming 'locked' is a global variable
-        // populated by the multi-account version of external.js
         if (locked) {
             toast('danger', 'Wallet is locked. Cannot sign message.');
             // Send error back to opener, consistent with how multi-account might handle rejections/errors
@@ -12,12 +11,6 @@ async function acceptRequest() {
             return;
         }
 
-        // Call the multi-account version of signMessage.
-        // Assumes 'unencryptedMnemonic' and 'selectedAccountVk' are global variables
-        // populated by the multi-account version of external.js.
-        // The signMessage function from multi-account xian.js will internally handle
-        // whether the account is derived (using mnemonic and index from accounts array)
-        // or imported (using unencryptedImportedSks).
         let signedMsg = await signMessage(message, unencryptedMnemonic, selectedAccountVk); 
         
         window.opener.postMessage({type: 'REQUEST_SIGNATURE', data: {signature: signedMsg}, callbackKey: callbackKey}, '*');
@@ -26,7 +19,7 @@ async function acceptRequest() {
         
     }
     catch (error) {
-        console.log(error); // Log the error for debugging
+        console.log(error);
         toast('danger', 'Error signing message: ' + error.message); // Show specific error message
         // Send error back to opener
         window.opener.postMessage({type: 'REQUEST_SIGNATURE', data: {signature: null, errors: [error.message]}, callbackKey: callbackKey}, '*');
